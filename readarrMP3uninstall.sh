@@ -2,7 +2,7 @@
 
 # Script by @ComputerByte
 # Modified for Readarr by @Craighton
-# For readarrMP3 Uninstalls
+# For ReadarrMP3 Uninstalls
 
 # Log to Swizzin.log
 export log=/root/logs/swizzin.log
@@ -21,7 +21,7 @@ rm /install/.readarrMP3.lock
 
 sed -e "s/class readarrMP3_meta://g" -i /opt/swizzin/core/custom/profiles.py
 sed -e "s/    name = \"readarrMP3\"//g" -i /opt/swizzin/core/custom/profiles.py
-sed -e "s/    pretty_name = \"readarrMP3\"//g" -i /opt/swizzin/core/custom/profiles.py
+sed -e "s/    pretty_name = \"ReadarrMP3\"//g" -i /opt/swizzin/core/custom/profiles.py
 sed -e "s/    baseurl = \"\/readarrMP3\"//g" -i /opt/swizzin/core/custom/profiles.py
 sed -e "s/    systemd = \"readarrMP3\"//g" -i /opt/swizzin/core/custom/profiles.py
 sed -e "s/    check_theD = True//g" -i /opt/swizzin/core/custom/profiles.py

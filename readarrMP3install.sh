@@ -4,7 +4,7 @@
 
 # Script by @ComputerByte
 # Modified for Readarr by @Craighton
-# For readarrMP3 Installs
+# For ReadarrMP3 Installs
 #shellcheck=SC1017
 
 # Log to Swizzin.log
@@ -20,36 +20,42 @@ echo_progress_done "Data Directory created and owned."
 
 echo_progress_start "Installing systemd service file"
 cat >/etc/systemd/system/readarrMP3.service <<-SERV
-# This file is owned by the readarr package, DO NOT MODIFY MANUALLY
-# Instead use 'dpkg-reconfigure -plow readarr' to modify User/Group/UMask/-data
-# Or use systemd built-in override functionality using 'systemctl edit readarr'
 [Unit]
-Description=readarr Daemon
-After=network.target
+Description=ReadarrMP3
+After=syslog.target network.target
 
 [Service]
+# Change the user and group variables here.
 User=${user}
 Group=${user}
-UMask=0002
 
 Type=simple
-ExecStart=/usr/bin/mono --debug /opt/readarr/readarr.exe -nobrowser -data=/home/${user}/.config/readarrMP3
+
+# Change the path to Readarr or mono here if it is in a different location for you.
+ExecStart=/opt/Readarr/Readarr -nobrowser --data=/home/${user}/.config/readarrMP3
 TimeoutStopSec=20
 KillMode=process
 Restart=on-failure
 
+# These lines optionally isolate (sandbox) Readarr from the rest of the system.
+# Make sure to add any paths it might use to the list below (space-separated).
+#ReadWritePaths=/opt/Readarr /path/to/movies/folder
+#ProtectSystem=strict
+#PrivateDevices=true
+#ProtectHome=true
+
 [Install]
 WantedBy=multi-user.target
 SERV
-echo_progress_done "readarrMP3 service installed"
+echo_progress_done "ReadarrMP3 service installed"
 
 # This checks if nginx is installed, if it is, then it will install nginx config for readarrMP3
 if [[ -f /install/.nginx.lock ]]; then
     echo_progress_start "Installing nginx config"
     cat >/etc/nginx/apps/readarrMP3.conf <<-NGX
 location ^~ /readarrMP3 {
-    proxy_pass http://127.0.0.1:9992;
-    proxy_set_header Host \$proxy_host;
+    proxy_pass http://127.0.0.1:9888/readarrMP3;
+    proxy_set_header Host \$host;
     proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Host \$host;
     proxy_set_header X-Forwarded-Proto \$scheme;
@@ -63,7 +69,7 @@ location ^~ /readarrMP3 {
 # Allow the API External Access via NGINX
 location ^~ /readarrMP3/api {
     auth_basic off;
-    proxy_pass http://127.0.0.1:9992;
+    proxy_pass http://127.0.0.1:9888;
 }
 NGX
     # Reload nginx
@@ -76,14 +82,15 @@ echo_progress_start "Generating configuration"
 # Start readarr to config
 systemctl stop readarr.service >>$log 2>&1
 
+
 cat > /home/${user}/.config/readarrMP3/config.xml << EOSC
 <Config>
   <LogLevel>info</LogLevel>
   <UpdateMechanism>BuiltIn</UpdateMechanism>
-  <Branch>main</Branch>
+  <Branch>master</Branch>
   <BindAddress>127.0.0.1</BindAddress>
-  <Port>9992</Port>
-  <SslPort>9898</SslPort>
+  <Port>9888</Port>
+  <SslPort>6969</SslPort>
   <EnableSsl>False</EnableSsl>
   <LaunchBrowser>False</LaunchBrowser>
   <AuthenticationMethod>None</AuthenticationMethod>
@@ -92,7 +99,7 @@ cat > /home/${user}/.config/readarrMP3/config.xml << EOSC
 </Config>
 EOSC
 
-chown -R ${user}:${user} \/home/${user}/.config/readarrMP3/
+chown -R ${user}:${user} /home/${user}/.config/readarrMP3/config.xml
 systemctl enable --now readarr.service >>$log 2>&1
 sleep 10
 systemctl enable --now readarrMP3.service >>$log 2>&1
@@ -104,7 +111,7 @@ if [[ -f /install/.panel.lock ]]; then
     cat <<EOF >>/opt/swizzin/core/custom/profiles.py
 class readarrMP3_meta:
     name = "readarrMP3"
-    pretty_name = "readarrMP3"
+    pretty_name = "ReadarrMP3"
     baseurl = "/readarrMP3"
     systemd = "readarrMP3"
     check_theD = False
