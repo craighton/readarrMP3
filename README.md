@@ -17,9 +17,9 @@ chmod +x ~/readarrMP3install.sh
 Sometimes Readarr won't start due to another Readarr existing, use the panel to stop Readarr and ReadarrMP3, enable Readarr and wait a second before starting ReadarrMP3 or
 
 ```bash
-sudo systemctl stop readarr && sudo systemctl stop readarrMP3
+sudo systemctl stop readarr && sudo systemctl stop readarrmp3
 sudo systemctl start readarr
-sudo systemctl start readarrMP3
+sudo systemctl start readarrmp3
 ```
 
 The log file should be located at ``/root/log/swizzin.log``.
