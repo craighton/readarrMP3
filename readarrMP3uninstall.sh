@@ -21,7 +21,7 @@ rm /install/.readarrmp3.lock
 
 sed -e "s/class readarrmp3_meta://g" -i /opt/swizzin/core/custom/profiles.py
 sed -e "s/    name = \"readarrmp3\"//g" -i /opt/swizzin/core/custom/profiles.py
-sed -e "s/    pretty_name = \"ReadarrMP3\"//g" -i /opt/swizzin/core/custom/profiles.py
+sed -e "s/    pretty_name = \"Readarr MP3\"//g" -i /opt/swizzin/core/custom/profiles.py
 sed -e "s/    baseurl = \"\/readarrmp3\"//g" -i /opt/swizzin/core/custom/profiles.py
 sed -e "s/    systemd = \"readarrmp3\"//g" -i /opt/swizzin/core/custom/profiles.py
 sed -e "s/    check_theD = True//g" -i /opt/swizzin/core/custom/profiles.py

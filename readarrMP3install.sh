@@ -87,7 +87,7 @@ cat > /home/${user}/.config/readarrmp3/config.xml << EOSC
 <Config>
   <LogLevel>info</LogLevel>
   <UpdateMechanism>BuiltIn</UpdateMechanism>
-  <Branch>master</Branch>
+  <Branch>develop</Branch>
   <BindAddress>127.0.0.1</BindAddress>
   <Port>9888</Port>
   <SslPort>6969</SslPort>
@@ -111,7 +111,7 @@ if [[ -f /install/.panel.lock ]]; then
     cat <<EOF >>/opt/swizzin/core/custom/profiles.py
 class readarrmp3_meta:
     name = "readarrmp3"
-    pretty_name = "ReadarrMP3"
+    pretty_name = "Readarr MP3"
     baseurl = "/readarrmp3"
     systemd = "readarrmp3"
     check_theD = False
